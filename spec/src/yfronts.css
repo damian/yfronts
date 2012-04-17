@@ -1,0 +1,125 @@
+::selection {
+  background: #F7BFBF;
+}
+
+::-moz-selection {
+  background: #F7BFBF;
+}
+
+body.has-toolbar {
+  padding-top: 50px;
+}
+
+.toolbar.hidden {
+  visibility: hidden;
+}
+
+.toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #434343;
+  padding: 10px;
+}
+
+.toolbar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.toolbar li {
+  float: left;
+}
+
+.toolbar li:first-child a {
+  border-left: 1px solid #121212;
+  border-radius: 3px 0 0 3px;
+}
+
+.toolbar li:last-child a {
+  border-radius: 0 3px 3px 0;
+}
+
+.toolbar a {
+  text-decoration: none;
+  padding: 4px 10px 4px;
+  display: block;
+  text-align: center;
+  border-top: 1px solid #121212;
+  border-bottom: 1px solid #121212;
+  border-right: 1px solid #121212;
+  border-bottom: 1px solid #121212;
+  font-family: Georgia, default;
+  color: #B3B3B3;
+  width: 12px;
+  background: #898989; /* Old browsers */
+  background: -moz-linear-gradient(top,  #898989 0%, #717171 1%, #656565 25%, #585858 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#898989), color-stop(1%,#717171), color-stop(25%,#656565), color-stop(100%,#585858)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #898989 0%,#717171 1%,#656565 25%,#585858 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #898989 0%,#717171 1%,#656565 25%,#585858 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #898989 0%,#717171 1%,#656565 25%,#585858 100%); /* IE10+ */
+  background: linear-gradient(top,  #898989 0%,#717171 1%,#656565 25%,#585858 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#898989', endColorstr='#585858',GradientType=0 ); /* IE6-9 */
+  -webkit-box-shadow: 0 1px 0px 0px #616161;
+  -moz-box-shadow: 0 1px 0px 0px #616161;
+  box-shadow: 0 1px 0px 0px #616161;
+}
+
+.toolbar a:active {
+  background-image: none;
+}
+.toolbar a:hover {
+  background: #424242;
+  color: #e6e6e6;
+}
+
+.toolbar a.bold {
+  font-weight: bold;
+}
+
+.toolbar a.italic {
+  font-style: italic;
+}
+
+.toolbar a.underline {
+  text-decoration: underline;
+}
+
+div[contenteditable] {
+  clear: both;
+  display: block;
+  width: 250px;
+  min-height: 50px;
+  padding: 10px;
+  line-height: 21px;
+}
+
+p {
+  margin-top: 0;
+}
+
+div[contenteditable]:hover {
+  outline: 1px dotted #ccc;
+}
+
+div[contenteditable]:focus {
+  outline: 1px solid #ccc;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 100;
+  background-color: #000;
+  opacity: 0;
+}
+
+.modal-backdrop.fade-in {
+  opacity: 0.8;
+  -webkit-transition: opacity 2s linear;
+}
