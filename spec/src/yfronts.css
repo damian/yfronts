@@ -1,26 +1,34 @@
 ::selection {
-  background: #F7BFBF;
+  background: rgba(172, 133, 232, .3);
+  color: #583E61;
 }
 
 ::-moz-selection {
-  background: #F7BFBF;
+  background: rgba(172, 133, 232, .3);
+  color: #583E61;
+}
+
+body {
+  padding-top: 0;
+  -webkit-transition: padding-top 0.5s ease-in-out;
 }
 
 body.has-toolbar {
   padding-top: 50px;
 }
 
-.toolbar.hidden {
-  visibility: hidden;
+body.has-toolbar .toolbar {
+  top: 0px;
 }
 
 .toolbar {
   position: fixed;
-  top: 0;
+  top: -49px;
   left: 0;
   width: 100%;
   background-color: #434343;
   padding: 10px;
+  -webkit-transition: top 0.5s ease-in-out;
 }
 
 .toolbar ul {
@@ -90,22 +98,25 @@ body.has-toolbar {
 div[contenteditable] {
   clear: both;
   display: block;
-  width: 250px;
+  width: 500px;
   min-height: 50px;
   padding: 10px;
   line-height: 21px;
+  border: 4px solid #DBDEE5;
 }
 
 p {
   margin-top: 0;
 }
 
+// TODO: Change the hover style, its too dark right now
 div[contenteditable]:hover {
-  outline: 1px dotted #ccc;
+  background-color: rgba(181, 200, 186, 0.3);
 }
 
 div[contenteditable]:focus {
-  outline: 1px solid #ccc;
+  background-color: #fff;
+  outline: none;
 }
 
 .modal-backdrop {

@@ -1,108 +1,168 @@
-(function(exports, $) {
+$(document).ready(function() {
 
-  var defaults = {
-    toolbar: "\
-      <div class='toolbar'>\
-        <ul>\
-          <li><a class='bold' href='#'>B</a></li>\
-          <li><a class='italic' href='#'>I</a></li>\
-          <li><a class='underline' href='#'>U</a></li>\
-        </ul>\
-      </div>\
-    "
-  };
+  (function(exports, $) {
 
-  Yfronts.hasToolbar = false;
-  Yfronts.$toolbar = null;
+    "use strict";
 
-  function Yfronts(el, options) {
-    this.$body = $(document.body);
-    this.$input = $(el);
-    this.options = $.extend({}, defaults, options);
+    var defaults = {
+      toolbar: "<div class='toolbar'>\
+          <ul>\
+            <li><a class='bold' href='#' tabindex='-1'>B</a></li>\
+            <li><a class='italic' href='#' tabindex='-1'>I</a></li>\
+            <li><a class='underline' href='#' tabindex='-1'>U</a></li>\
+          </ul>\
+        </div>\
+      "
+    };
 
-    // Setup event handlers
-    var _this = this;
-    this.$input.on('focus', function(e) {
-      $.proxy(_this.handleFocus(e), _this);
-    });
-  };
+    // Private variables
+    var $html = $('html')
+      , $body = $(document.body)
+      , hasToolbar = false
+      , $toolbar
+      ;
 
-  Yfronts.prototype = {
-    handleFocus : function(e) {
-      this.$body.addClass('has-toolbar');
-
-      if (Yfronts.hasToolbar) {
-        Yfronts.$toolbar.removeClass('hidden');
-      } else {
-        this.setupToolbar();
-      }
-      //this.handleBlur();
-    },
-    setupToolbar : function() {
-      Yfronts.$toolbar = $(this.options.toolbar).prependTo(this.$body);
-      Yfronts.hasToolbar = true;
+    /**
+     * Instantiates a new instance of Yfronts on the given element
+     *
+     * @class Yfronts
+     * @constructor
+     * @param {DOMNode} A Node
+     * @param {Object} A JavaScript object of configuration options
+     */
+    function Yfronts(el, options) {
+      this.$input = $(el);
+      this.options = $.extend({}, defaults, options);
       var _this = this;
 
-      Yfronts.$toolbar.on('click', 'a', function(e) {
-        $.proxy(_this.handleFormat(e), _this);
-      });
-    },
-    handleFormat : function(e) {
-      e.preventDefault();
-
-      var $btn = $(e.target)
-        , btnClass = $btn.attr('class')
-        ;
-
-      document.execCommand($btn.attr('class'), false, true);
-//    var selection = document.getSelection().toString();
-//    console.log(selection);
-//    console.log(selection.length);
-//    this['handleFormat' + btnClass.capitalize()](selection);
-    },
-
-    handleFormatBold : function(selection) {
-      document.execCommand('inserthtml', false, '<strong>' + selection + '</strong>');
-    },
-
-    handleFormatItalic : function(selection) {
-      document.execCommand('inserthtml', false, '<em>' + selection + '</em>');
-    },
-
-    handleBlur : function() {
-      var _this = this;
-      $('body').on('click focusin', function(e) {
-        var $target = $(e.target)
-          , inToolbar = $target.closest('.toolbar').length
-          , inContentEditable = $target.closest('div[contenteditable]').length
-          ;
-
-        if (inToolbar || inContentEditable) return;
-        Yfronts.$toolbar.addClass('hidden');
-        $(document.body).removeClass('has-toolbar');
+      // Setup event handlers
+      this.$input.on('focus', function(e) {
+        $.proxy(_this.handleFocus(e), _this);
       });
     }
-  };
 
-  exports.Yfronts = Yfronts;
+    Yfronts.prototype = {
+      /**
+       * Initializes the toolbar by attaching it to the body and setting up its event handlers
+       *
+       * @method initToolbar
+       */
+      initToolbar : function() {
+        $toolbar = $(this.options.toolbar).prependTo($body);
+        hasToolbar = true;
+        var _this = this;
 
-})(window, jQuery);
+        $toolbar.on('click', 'a', function(e) {
+          $.proxy(_this.handleFormat(e), _this);
+        });
+      },
 
+      /**
+       * Callback function for when a contenteditable region is focussed
+       *
+       * @method handleFocus
+       * @param {EventObject} An event object
+       */
+      handleFocus : function(e) {
+        var _this = this;
+        $body.addClass('has-toolbar');
 
-//$(document).ready(function() {
-//  $('[contenteditable]').on('focus', function() {
-//    var $this = $(this)
-//      , hasY = $this.data('yfronts')
-//      ;
-//
-//    if (!hasY) {
-//      var yf = new Yfronts(this);
-//      $this.data('yfronts', yf);
-//      //$this.trigger('focus');
-//    }
-//  });
-//});
+        if (!hasToolbar) this.initToolbar();
 
-String.prototype.capitalize = function() {
-  return this.charAt(0).toUpperCase() + this.slice(1);
-};
+        // Event handler for
+        $html.on('click focusin', function(e) {
+          $.proxy(_this.handleBlur(e), _this);
+        });
+      },
+
+      /**
+       * Callback function for when a contenteditable region is blurred
+       *
+       * @method handleFocus
+       * @param {EventObject} An event object
+       */
+      handleBlur : function(e) {
+        var $target = $(e.target)
+          , isFromToolbar = $target.closest('.toolbar')
+          , isFromEditable = $target.closest('[contenteditable]')
+          ;
+
+        if (isFromToolbar.length || isFromEditable.length) return;
+
+        // Unbind the body click handler
+        $html.off('click focusin');
+        $body.removeClass('has-toolbar');
+      },
+
+      /**
+       * Proxy function for all formatting actions contained within the toolbar
+       *
+       * @method handleFormat
+       * @param {EventObject} An event object
+       */
+      handleFormat : function(e) {
+        e.preventDefault();
+
+        var $btn = $(e.target)
+          , btnClass = $btn.attr('class')
+          , fn = this['cmd_' + btnClass]
+          ;
+
+        if (fn) {
+          var el = fn.call(this);
+          this.setUserSelection(el);
+        } else {
+          document.execCommand(btnClass, false, true);
+        }
+      },
+
+      setUserSelection : function(el) {
+        var sel = document.getSelection();
+        var range = document.createRange();
+        range.selectNodeContents(el);
+        sel.removeAllRanges();
+        sel.addRange(range);
+
+        return range;
+      },
+
+      cmd_bold : function() {
+        var range = this.selectionRange()
+          , tag = 'strong'
+          , node = document.createElement(tag)
+          ;
+
+        if (range.startContainer.parentNode.nodeName.toLowerCase() != tag) {
+          range.surroundContents(node);
+        } else {
+          // Undo strong
+          console.log('Undo parent tag');
+          document.execCommand('removeFormat', false, true);
+        }
+
+        return node;
+      },
+
+      cmd_italic : function() {
+        var range = this.selectionRange()
+          , node = document.createElement('em')
+          ;
+
+        range.surroundContents(node);
+
+        return node;
+      },
+
+      selectionRange : function() {
+        return document.getSelection().getRangeAt(0);
+      }
+    };
+
+    exports.Yfronts = Yfronts;
+
+  })(window, jQuery);
+
+  var $editable = $('[contenteditable]').first();
+  var yf = new Yfronts($editable);
+  $editable.data('yfronts', yf);
+});
