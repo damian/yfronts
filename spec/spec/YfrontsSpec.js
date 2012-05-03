@@ -4,7 +4,9 @@ describe("Yfronts", function() {
   beforeEach(function() {
     $body = $(document.body);
     $toolbar = $body.find('.toolbar').first();
-    instance = $('[contenteditable]').first().data('yfronts');
+    if (!instance) {
+      instance = new Yfronts($('[contenteditable]')[0]);
+    }
   });
 
   describe("constructor", function() {
@@ -33,8 +35,8 @@ describe("Yfronts", function() {
     describe("on focus", function() {
 
       beforeEach(function() {
-        spyOn(instance, 'initToolbar').andCallThrough();
         spyOn(instance, 'handleFocus').andCallThrough();
+        spyOn(instance, 'initToolbar').andCallThrough();
         instance.$input.trigger('focus');
       });
 
@@ -109,12 +111,6 @@ describe("Yfronts", function() {
       instance.setUserSelection(text);
 
       $toolbar.find('a.bold').trigger(ev);
-      instance.$input.trigger('blur');
-    });
-
-    afterEach(function() {
-      var html = '<p>' + instance.$input.text() + '</p>';
-      instance.$input.html(html);
     });
 
     it("should ensure handleFormat is called", function() {
