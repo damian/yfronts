@@ -9,6 +9,11 @@
           <li><a class='italic' href='#' tabindex='-1'>I</a></li>\
           <li><a class='underline' href='#' tabindex='-1'>U</a></li>\
         </ul>\
+        <ul class='headers'>\
+          <li><a class='h1' href='#' tabindex='-1'>H1</a></li>\
+          <li><a class='h2' href='#' tabindex='-1'>H2</a></li>\
+          <li><a class='h3' href='#' tabindex='-1'>H3</a></li>\
+        </ul>\
       </div>\
     "
   };
@@ -108,10 +113,22 @@
 
       if (fn) {
         var el = fn.call(this);
-        this.setUserSelection(el);
+        // this.setUserSelection(el);
       } else {
         document.execCommand(btnClass, false, true);
       }
+    },
+
+    exec : function(type, arg) {
+      document.execCommand(type, false, arg);
+    },
+
+    cmd_h2 : function() {
+      this.exec('formatBlock', 'h2');
+    },
+
+    cmd_h3 : function() {
+      this.exec('formatBlock', 'h3');
     },
 
     setUserSelection : function(el) {

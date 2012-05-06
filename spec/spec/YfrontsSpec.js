@@ -139,8 +139,28 @@ describe("Yfronts", function() {
 
     // TODO: Ensure the user has selected some text
     // TODO: Ensure that we can apply a style across elements within the selection
-    // TODO: Ensure the current selection stays selected
     // TODO: Ensure we can only press the cmd buttons if we have a selection
     // TODO: Provide a hook for saving
+  });
+
+  describe("header formatting", function() {
+    var ev;
+
+    beforeEach(function() {
+      ev = $.Event('click');
+
+      spyOn(instance, 'cmd_h2').andCallThrough();
+
+      instance.$input.trigger('focus'); // Ensure the toolbar is shown
+      var text = instance.$input.find('p')[0];
+      instance.setUserSelection(text);
+
+      $toolbar.find('a.h2').trigger(ev);
+    });
+
+    it("should wrap the content in h2 tags", function() {
+      expect($.trim(instance.$input.html())).toEqual('<h2>Hello world my name is Damian Nicholson</h2>');
+    });
+
   });
 });
