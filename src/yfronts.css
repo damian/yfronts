@@ -9,7 +9,11 @@
 }
 
 body {
+  background: #fafafa;
+  color: #777;
   padding-top: 0;
+  width: 960px;
+  margin: 0 auto;
   -webkit-transition: padding-top 0.5s ease-in-out;
 }
 
@@ -103,25 +107,22 @@ body.has-toolbar .toolbar {
 div[contenteditable] {
   clear: both;
   display: block;
-  width: 500px;
   min-height: 50px;
   padding: 10px;
   line-height: 21px;
-  border: 4px solid #DBDEE5;
+  background: #fafafa;
+  color: #aaa;
 }
 
 p {
   margin-top: 0;
-}
-
-// TODO: Change the hover style, its too dark right now
-div[contenteditable]:hover {
-  background-color: rgba(181, 200, 186, 0.3);
+  line-height: 1.5em;
 }
 
 div[contenteditable]:focus {
-  background-color: #fff;
+  background: #fafafa;
   outline: none;
+  color: #616266;
 }
 
 .modal-backdrop {

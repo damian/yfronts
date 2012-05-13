@@ -110,7 +110,7 @@ describe("Yfronts", function() {
       var text = instance.$input.find('p')[0];
       instance.setUserSelection(text);
 
-      $toolbar.find('a.bold').trigger(ev);
+      $toolbar.find('a[data-cmd="bold"]').trigger(ev);
     });
 
     it("should ensure handleFormat is called", function() {
@@ -137,10 +137,6 @@ describe("Yfronts", function() {
       expect(instance.$input.is(':focus')).toBeTruthy();
     });
 
-    // TODO: Ensure the user has selected some text
-    // TODO: Ensure that we can apply a style across elements within the selection
-    // TODO: Ensure we can only press the cmd buttons if we have a selection
-    // TODO: Provide a hook for saving
   });
 
   describe("header formatting", function() {
@@ -152,15 +148,22 @@ describe("Yfronts", function() {
       spyOn(instance, 'cmd_h2').andCallThrough();
 
       instance.$input.trigger('focus'); // Ensure the toolbar is shown
-      var text = instance.$input.find('p')[0];
+      var text = instance.$input.children().first()[0];
       instance.setUserSelection(text);
-
-      $toolbar.find('a.h2').trigger(ev);
+      $toolbar.find('a[data-cmd="h2"]').trigger(ev);
     });
 
     it("should wrap the content in h2 tags", function() {
-      expect($.trim(instance.$input.html())).toEqual('<h2>Hello world my name is Damian Nicholson</h2>');
+      expect(instance.$input.find('h2').length).toEqual(1);
     });
 
+    xit("should wrap the content in p tags when pressed again", function() {
+      expect(instance.$input.find('p').length).toEqual(2);
+    });
   });
+  //
+    // TODO: Ensure the user has selected some text
+    // TODO: Ensure that we can apply a style across elements within the selection
+    // TODO: Ensure we can only press the cmd buttons if we have a selection
+    // TODO: Provide a hook for saving
 });
