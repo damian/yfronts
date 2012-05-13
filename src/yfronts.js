@@ -147,7 +147,7 @@
      */
     cmd_h2 : function() {
       var formatType = 'h2';
-      if (this.commandType('formatBlock') == formatType) {
+      if (this.commandType('formatBlock') === formatType) {
         formatType = 'p';
       }
       this.exec('formatBlock', formatType);
@@ -162,7 +162,7 @@
      */
     cmd_h3 : function() {
       var formatType = 'h3';
-      if (this.commandType('formatBlock') == formatType) {
+      if (this.commandType('formatBlock') === formatType) {
         formatType = 'p';
       }
       this.exec('formatBlock', formatType);
